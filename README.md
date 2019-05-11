@@ -1,4 +1,4 @@
-# dl_probs
+# CodeChef Problem Downloader
 Download Problems from codechef and store in pdf
 
 ## Setup
@@ -9,7 +9,7 @@ Download Problems from codechef and store in pdf
 		`brew install wkhtmltopdf`
 	3. Windows:
 		1. Download wkhtmltopdf from [releases](https://github.com/wkhtmltopdf/wkhtmltopdf/releases)
-		2. Install the release [wkhtmltox-[version_number].msvc[2015|2019]-win[32|64].exe]
+		2. Install the release [wkhtmltox-[`version_number`].msvc[`2015`|`2019`]-win[`32`|`64`].exe]
 		3. Make sure it's in the PATH
 2. Install the python modules:
 	`pip install -r requirements.txt`
