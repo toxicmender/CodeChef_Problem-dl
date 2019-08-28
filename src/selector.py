@@ -22,35 +22,33 @@ def contests(flag):
 
 	return urls
 
-def problems(url):
+def problemurls(url):
 	"""
 	Returns a dictionary of Problems {Name: URL} from the contest passed as argument
 	"""
-	with urllib.request.urlopen(url) as response:
+	req = urllib.request.Request(url, headers = {"User-Agent": "Mozilla/5.0"})
+	with urllib.request.urlopen(req) as response:
 		problems_page = BeautifulSoup(response.read(), "html.parser")
-
-	problems = problems_page.find_all("table", class_ = "dataTable")
-	urls = {}
-	links = problems[0].tbody.find_all("a", class_ = "ember-view")
-	for link in links:
-		urls[link.get_text()] = link.get("href")
-
-	return urls
+		problems = problems_page.find_all("table", class_ = "dataTable")
+		urls = {}
+		links = problems[0].tbody.find_all("a", class_ = "ember-view")
+		for link in links:
+			urls[link.get_text()] = link.get("href")
+		return urls
 
 def urldict(url, flag):
 	"""
 	Returns a dictionary of URLs {Name: URL} from the contest passed as argument
 	"""
-	with urllib.request.urlopen(url) as response:
+	req = urllib.request.Request(url, headers = {"User-Agent": "Mozilla/5.0"})
+	with urllib.request.urlopen(req) as response:
 		problems_page = BeautifulSoup(response.read(), "html.parser")
-
-	problems = problems_page.find_all("table", class_="dataTable")
-	urls = {}
-	links = problems[flag].tbody.find_all("a")
-	for link in links:
-		urls[link.get_text()] = link.get("href")
-
-	return urls
+		problems = problems_page.find_all("table", class_="dataTable")
+		urls = {}
+		links = problems[flag].tbody.find_all("a")
+		for link in links:
+			urls[link.get_text()] = link.get("href")
+		return urls
 
 # -------------------------------------------------------------------------------------------------
 # Main Driver
@@ -74,18 +72,19 @@ enum = enumerate(contests.keys())
 for contest in enum:
 	print(contest[0] + 1, contest[1], sep = ". ")
 
-index = input("Enter choice of contest [index number]: ") 
+index = int(input("Enter choice of contest [index number]: "))
 
 # -----------------------------------------------------------------------------
-problems = urldict(contests[enum[index - 1][1]], 0) # problems(enum[index - 1][1])
+print("https://www.codechef.com" + contests[list(contests.keys())[index - 1]].split("?")[0])
+problems = problemurls("https://www.codechef.com" + contests[list(contests.keys())[index - 1]].split("?")[0]) # problems(enum[index - 1][1])
 
 enum = enumerate(problems.keys())
 for problem in enum:
-	print(contest[0] + 1, contest[1], sep = ". ")
+	print(problem[0] + 1, problem[1], sep = ". ")
 
-index = input("Enter choice of problem [index number]: ") 
+index = int(input("Enter choice of problem [index number]: "))
 
-with urllib.request.urlopen(problems[enum[index - 1][1]]) as response:
+with urllib.request.urlopen(problems[list(problems.keys())[index - 1]]) as response:
 	# pdfkit.from_file(response, str(enum[index - 1][1]) + ".pdf")
 	with open("temp.html", "w") as filehandler:
 		filehandler.write(response.read())
